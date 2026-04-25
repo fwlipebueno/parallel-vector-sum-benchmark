@@ -1,27 +1,23 @@
-<p align="right">
-  <a href="#english">
-    <img src="https://img.shields.io/badge/lang-English-blue" alt="English">
-  </a>
-  <a href="#portugues">
-    <img src="https://img.shields.io/badge/lang-Português-green" alt="Português">
-  </a>
-</p>
-
 <a id="english"></a>
 
-# Parallel Vector Sum Benchmark — C++ / OpenMP / Intel TBB
-A reproducible C++ benchmark comparing three approaches for summing a large vector:
+<p align="right">
+  <kbd><a href="#english">English</a></kbd>
+  <kbd><a href="#portuguese">Português</a></kbd>
+</p>
+
+# Parallel Vector Sum Benchmark
+C++ benchmark comparing sequential execution, OpenMP, and Intel TBB for summing a vector with 100 million elements.
+
+The project was built as a reproducible performance experiment: it runs multiple measurements, validates the computed result, stores raw execution times, calculates statistical metrics, generates charts and produces a technical report.
+
+## Purpose
+The goal is to compare three vector summation strategies under the same conditions:
 
 - sequential execution with a simple `for` loop;
 - parallel execution with OpenMP;
 - parallel execution with Intel TBB.
 
-The benchmark runs 30 measurements for each approach, validates the computed sum, stores raw execution times in CSV format, calculates statistical metrics, generates charts, and produces a technical report.
-
-## Why this repository exists
-This project is not just about using threads. The goal is to make the experiment reproducible and easy to inspect: same input size, same result validation, same output structure, and a separate analysis step.
-
-This makes the comparison more reliable and keeps the benchmark results traceable.
+Rather than measuring only a single execution, the benchmark performs 30 runs for each approach and analyzes the results using mean time, standard deviation, minimum, maximum and speedup.
 
 ## Results
 The official execution used a vector with `100,000,000` elements and 30 runs per approach.
@@ -34,18 +30,47 @@ The official execution used a vector with `100,000,000` elements and 30 runs per
 
 In the tested environment, OpenMP achieved the best average execution time, followed closely by Intel TBB. Both parallel implementations reduced the average runtime compared to the sequential version.
 
-The benchmark was executed on a Linux virtual machine with 3 available CPUs. Because vector summation is highly memory-bound, speedup is limited not only by thread count, but also by memory bandwidth and runtime overhead.
+## Performance comparison
+![Execution time comparison](./results/comparison_times.png)
 
-## Project structure
+The benchmark was executed on a Linux virtual machine with 3 available CPUs. Since vector summation is a memory-intensive operation, the speedup is limited not only by the number of threads, but also by memory bandwidth, scheduling overhead and runtime coordination costs.
+
+## Repository structure
     .
-    ├── src/main.cpp                    # C++ benchmark implementation
-    ├── scripts/analyze.py              # statistical analysis and chart generation
-    ├── scripts/build_report_docx.py    # technical report generation
-    ├── scripts/run_linux.sh            # complete Linux/WSL execution flow
-    ├── docs/relatorio_modelo.md        # base technical report model
-    ├── results/                        # measured data, charts and final report
+    ├── src/
+    │   └── main.cpp
+    ├── scripts/
+    │   ├── analyze.py
+    │   ├── build_report_docx.py
+    │   └── run_linux.sh
+    ├── docs/
+    │   ├── relatorio_modelo.md
+    │   └── relatorio_modelo.docx
+    ├── results/
+    │   ├── raw_times.csv
+    │   ├── summary.csv
+    │   ├── comparison_times.png
+    │   ├── sequential_times.png
+    │   ├── openmp_times.png
+    │   ├── tbb_times.png
+    │   ├── report.md
+    │   ├── report.docx
+    │   └── environment.txt
     ├── Makefile
-    └── requirements.txt
+    ├── requirements.txt
+    └── README.md
+
+## Main files
+| Path | Description |
+|---|---|
+| `src/main.cpp` | C++ benchmark implementation with sequential, OpenMP and Intel TBB strategies. |
+| `scripts/run_linux.sh` | Complete Linux/WSL execution flow. |
+| `scripts/analyze.py` | Statistical analysis and chart generation. |
+| `scripts/build_report_docx.py` | Word report generation from measured results. |
+| `results/raw_times.csv` | Raw execution times from all runs. |
+| `results/summary.csv` | Mean, standard deviation, min, max and speedup. |
+| `results/environment.txt` | Execution environment metadata. |
+| `results/report.docx` | Final technical report. |
 
 ## Requirements
 Linux or WSL with:
@@ -93,43 +118,58 @@ Custom execution:
 ## Generated outputs
 After execution, the main files are generated inside `results/`:
 
-    raw_times.csv          # raw execution measurements
-    summary.csv            # mean, standard deviation, min, max and speedup
-    comparison_times.png   # comparison chart for all approaches
-    sequential_times.png   # sequential execution chart
-    openmp_times.png       # OpenMP execution chart
-    tbb_times.png          # Intel TBB execution chart
-    report.md              # technical report draft
-    report.docx            # final Word report
-    environment.txt        # execution environment metadata
+| File | Description |
+|---|---|
+| `raw_times.csv` | Raw execution measurements. |
+| `summary.csv` | Mean, standard deviation, min, max and speedup. |
+| `comparison_times.png` | Comparison chart for all approaches. |
+| `sequential_times.png` | Sequential execution chart. |
+| `openmp_times.png` | OpenMP execution chart. |
+| `tbb_times.png` | Intel TBB execution chart. |
+| `report.md` | Technical report draft. |
+| `report.docx` | Final Word report. |
+| `environment.txt` | Execution environment metadata. |
+
+## Technical report
+The final report is available in:
+
+- [`results/report.docx`](./results/report.docx)
+- [`results/report.md`](./results/report.md)
+
+The report includes the problem description, methodology, statistical results, charts, discussion and conclusion.
 
 ## Methodology notes
 The program performs a warm-up pass before collecting measurements. This warm-up is not recorded in the output file and helps reduce first-run noise such as runtime initialization and initial loading effects.
 
 Each measured execution validates the computed sum against the expected result before recording the elapsed time. This prevents invalid measurements from being included in the analysis.
 
-The comparison should be based on mean time and standard deviation, not only on the fastest execution. Since vector summation is a simple memory-intensive operation, parallel speedup can be limited by memory bandwidth, scheduling overhead, and the number of available CPU cores.
+The comparison should be based on mean time and standard deviation, not only on the fastest execution. Since vector summation is a simple memory-intensive operation, parallel speedup can be limited by memory bandwidth, scheduling overhead and the number of available CPU cores.
 
 ## Cleaning generated files
     make clean
 
 ---
 
-<a id="portugues"></a>
+<a id="portuguese"></a>
 
-# Benchmark de Soma de Vetor — C++ / OpenMP / Intel TBB
-Benchmark em C++ para comparar três abordagens de soma de um vetor grande:
+<p align="right">
+  <kbd><a href="#english">English</a></kbd>
+  <kbd><a href="#portuguese">Português</a></kbd>
+</p>
+
+# Benchmark de Soma de Vetor
+Benchmark em C++ comparando execução sequencial, OpenMP e Intel TBB na soma de um vetor com 100 milhões de elementos.
+
+O projeto foi estruturado como um experimento de desempenho reprodutível: executa múltiplas medições, valida o resultado calculado, grava os tempos brutos, calcula métricas estatísticas, gera gráficos e produz um relatório técnico.
+
+## Objetivo
+O objetivo é comparar três estratégias de soma de vetor sob as mesmas condições:
 
 - execução sequencial com `for` simples;
 - execução paralela com OpenMP;
 - execução paralela com Intel TBB.
 
-O benchmark executa 30 medições por abordagem, valida o resultado da soma, grava os tempos brutos em CSV, calcula métricas estatísticas, gera gráficos e produz um relatório técnico.
-
-## Por que este repositório existe
-Este projeto não é apenas sobre usar threads. O objetivo é tornar o experimento reprodutível e fácil de revisar: mesmo tamanho de entrada, mesma validação de resultado, mesma estrutura de saída e análise separada da execução.
-
-Isso torna a comparação mais confiável e mantém os resultados rastreáveis.
+Em vez de medir apenas uma execução isolada, o benchmark realiza 30 execuções por abordagem e analisa os resultados com média, desvio padrão, mínimo, máximo e speedup.
 
 ## Resultados
 A execução oficial utilizou um vetor com `100.000.000` elementos e 30 execuções por abordagem.
@@ -142,18 +182,47 @@ A execução oficial utilizou um vetor com `100.000.000` elementos e 30 execuç�
 
 No ambiente testado, OpenMP obteve o melhor tempo médio de execução, seguido de perto pela Intel TBB. As duas implementações paralelas reduziram o tempo médio em relação à versão sequencial.
 
-O benchmark foi executado em uma máquina virtual Linux com 3 CPUs disponíveis. Como a soma de vetor é uma operação fortemente dependente de acesso à memória, o ganho de paralelização é limitado não apenas pela quantidade de threads, mas também pela largura de banda de memória e pelo overhead do runtime.
+## Comparação de desempenho
+![Comparação dos tempos de execução](./results/comparison_times.png)
 
-## Estrutura do projeto
+O benchmark foi executado em uma máquina virtual Linux com 3 CPUs disponíveis. Como a soma de vetor é uma operação intensiva em acesso à memória, o ganho de paralelização é limitado não apenas pela quantidade de threads, mas também pela largura de banda de memória, pelo overhead de escalonamento e pelo custo de coordenação das bibliotecas paralelas.
+
+## Estrutura do repositório
     .
-    ├── src/main.cpp                    # implementação do benchmark em C++
-    ├── scripts/analyze.py              # análise estatística e geração de gráficos
-    ├── scripts/build_report_docx.py    # geração do relatório técnico
-    ├── scripts/run_linux.sh            # fluxo completo de execução no Linux/WSL
-    ├── docs/relatorio_modelo.md        # modelo base do relatório técnico
-    ├── results/                        # dados medidos, gráficos e relatório final
+    ├── src/
+    │   └── main.cpp
+    ├── scripts/
+    │   ├── analyze.py
+    │   ├── build_report_docx.py
+    │   └── run_linux.sh
+    ├── docs/
+    │   ├── relatorio_modelo.md
+    │   └── relatorio_modelo.docx
+    ├── results/
+    │   ├── raw_times.csv
+    │   ├── summary.csv
+    │   ├── comparison_times.png
+    │   ├── sequential_times.png
+    │   ├── openmp_times.png
+    │   ├── tbb_times.png
+    │   ├── report.md
+    │   ├── report.docx
+    │   └── environment.txt
     ├── Makefile
-    └── requirements.txt
+    ├── requirements.txt
+    └── README.md
+
+## Arquivos principais
+| Caminho | Descrição |
+|---|---|
+| `src/main.cpp` | Implementação do benchmark em C++ com estratégias sequencial, OpenMP e Intel TBB. |
+| `scripts/run_linux.sh` | Fluxo completo de execução no Linux/WSL. |
+| `scripts/analyze.py` | Análise estatística e geração de gráficos. |
+| `scripts/build_report_docx.py` | Geração do relatório em Word a partir dos resultados medidos. |
+| `results/raw_times.csv` | Tempos brutos de todas as execuções. |
+| `results/summary.csv` | Média, desvio padrão, mínimo, máximo e speedup. |
+| `results/environment.txt` | Metadados do ambiente de execução. |
+| `results/report.docx` | Relatório técnico final. |
 
 ## Requisitos
 Linux ou WSL com:
@@ -201,15 +270,25 @@ Execução personalizada:
 ## Saídas geradas
 Após a execução, os principais arquivos são gerados em `results/`:
 
-    raw_times.csv          # medições brutas das execuções
-    summary.csv            # média, desvio padrão, mínimo, máximo e speedup
-    comparison_times.png   # gráfico comparando todas as abordagens
-    sequential_times.png   # gráfico da execução sequencial
-    openmp_times.png       # gráfico da execução com OpenMP
-    tbb_times.png          # gráfico da execução com Intel TBB
-    report.md              # rascunho do relatório técnico
-    report.docx            # relatório final em Word
-    environment.txt        # metadados do ambiente de execução
+| Arquivo | Descrição |
+|---|---|
+| `raw_times.csv` | Medições brutas das execuções. |
+| `summary.csv` | Média, desvio padrão, mínimo, máximo e speedup. |
+| `comparison_times.png` | Gráfico comparando todas as abordagens. |
+| `sequential_times.png` | Gráfico da execução sequencial. |
+| `openmp_times.png` | Gráfico da execução com OpenMP. |
+| `tbb_times.png` | Gráfico da execução com Intel TBB. |
+| `report.md` | Rascunho do relatório técnico. |
+| `report.docx` | Relatório final em Word. |
+| `environment.txt` | Metadados do ambiente de execução. |
+
+## Relatório técnico
+O relatório final está disponível em:
+
+- [`results/report.docx`](./results/report.docx)
+- [`results/report.md`](./results/report.md)
+
+O relatório inclui a descrição do problema, metodologia, resultados estatísticos, gráficos, discussão e conclusão.
 
 ## Observações de metodologia
 O programa realiza uma passagem de aquecimento antes da coleta das medições. Esse aquecimento não é registrado no arquivo de saída e ajuda a reduzir ruídos de primeira execução, como inicialização de runtime e efeitos iniciais de carregamento.
